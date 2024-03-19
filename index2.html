@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>HW22</title>
+</head>
+<body>
+    <script>
+        class HtmlElement {
+            constructor(tagName, isSelfClosing = false, textContent = '') {
+                this.tagName = tagName;
+                this.isSelfClosing = isSelfClosing;
+                this.textContent = textContent;
+                this.attributes = [];
+                this.styles = [];
+                this.nestedElements = [];
+            }
+
+            setAttribute(attribute) {
+                this.attributes.push(attribute);
+            }
+
+            setStyle(style) {
+                this.styles.push(style);
+            }
+
+            appendNestedElement(element) {
+                this.nestedElements.push(element);
+            }
+
+            prependNestedElement(element) {
+                this.nestedElements.unshift(element);
+            }
+
+            getHtml() {
+                let htmlCode = `<${this.tagName}`;
+
+                for (const attribute of this.attributes) {
+                    htmlCode += ` ${attribute}`;
+                }
+
+                if (this.isSelfClosing) {
+                    htmlCode += ` />`;
+                } else {
+                    htmlCode += `>`;
+                    htmlCode += this.textContent;
+
+                    for (const style of this.styles) {
+                        htmlCode += ` style="${style}"`;
+                    }
+
+                    for (const nestedElement of this.nestedElements) {
+                        htmlCode += nestedElement.getHtml();
+                    }
+
+                    htmlCode += `</${this.tagName}>`;
+                }
+
+                return htmlCode;
+            }
+        }
+
+        const wrapper = new HtmlElement('div');
+        wrapper.setAttribute('id="wrapper"');
+        wrapper.setStyle('display: flex;');
+
+        const div1 = new HtmlElement('div');
+        div1.setStyle('width: 300px; margin: 10px;');
+
+        const h3 = new HtmlElement('h3', false, 'What is LoremIpsum');
+        div1.appendNestedElement(h3);
+
+        const img = new HtmlElement('img', true);
+        img.setAttribute('src="lipsum.jpg"');
+        img.setAttribute('alt="Lorem Ipsum"');
+        img.setStyle('width: 100%;');
+        div1.appendNestedElement(img);
+
+        const p = new HtmlElement('p');
+        p.setStyle('text-align: justify;');
+        p.textContent = `"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."`;
+        div1.appendNestedElement(p);
+
+        const link = new HtmlElement('a');
+        link.setAttribute('href="https://www.lipsum.com/"');
+        link.setAttribute('target="_blank"');
+        link.textContent = 'More...';
+        p.appendNestedElement(link);
+
+        wrapper.appendNestedElement(div1);
+
+        const div2 = div1; // Второй div повторяет первый для примера
+        wrapper.appendNestedElement(div2);
+
+        document.write(wrapper.getHtml());
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //1..
+        class User {
+            constructor(radius) {
+
+                this.radius = radius;
+            }
+            get rad() {
+                return this.radius;
+            }
+            set rad (value) {
+    this.rad = value;
+  }
+            get diam() {
+                let diametr = this.radius *2
+                return diametr
+            }
+
+            S(){
+             let s = Math.round(this.radius**2 * Math.PI)
+             return s
+            }
+            L(){
+                let l = Math.round(this.diam * Math.PI)
+                return l
+            }
+        }
+        let user = new User(5);
+        console.log(user.S());
+        console.log(user.L());
+        console.log(user.rad);
+        console.log(user.diam);
+
+        ///2..
+        class HtmlElement {
+            constructor(tagName, isSelfClosing = false, textContent =''){
+                this.tagName = tagName;
+                this.isSelfClosing = isSelfClosing;
+                this.textContent = textContent;
+                this.attributes = [];
+                this.styles = [];
+                this.nestedElement = [];
+
+            }
+            setAttribute(att){
+                this.attributes.push(att)
+            }
+            setStyle(style){
+                this.styles.push(style)
+            }
+            appendNestedElement(element){
+                this.nestedElement.push(element)
+            }
+            prependNestedElement(element){
+                this.nestedElement.unshift(element)
+            }
+            getHtml(){
+                let htmlcode=`<${this.tagName}`;
+                for (const attributte of this.attributes){
+                    htmlcode+= ` ${attribute}`;
+                }
+                if (this.isSelfClosing) {
+                    htmlCode += ` />`;
+                } else {
+                    htmlCode += `>`;
+                    htmlCode += this.textContent;
+
+                    for (const style of this.styles) {
+                        htmlCode += ` style="${style}"`;
+                    }
+                      for (const nestedElement of this.nestedElements) {
+                        htmlCode += nestedElement.getHtml();
+                    }
+
+                    htmlCode += `</${this.tagName}>`;
+                }
+
+                return htmlCode;
+            }
+        }
+      const wrapper = new HtmlElement('div');
+        wrapper.setAttribute('id="wrapper"');
+        wrapper.setStyle('display: flex;');
+    </script>
+</body>
+
+</html>
